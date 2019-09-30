@@ -38,29 +38,29 @@ class SimplePhotoLoader {
         imageView: ImageView,
         placeholder: View
     ) {
-        val params = LoadPhotoRequestParams(url)
         imageView.tag = url
+        val params = LoadPhotoRequestParams(url)
         val weakImageViewReference = WeakReference(imageView)
         val weakPlaceholderReference = WeakReference(placeholder)
-        ImageCache.getInstance().get(url)?.also {
-            bindImage(url, it, weakImageViewReference.get(), weakPlaceholderReference.get())
-        } ?: run {
-            val request = repository.loadPhoto(params)
-            request.observe(true, object :
-                Callback<NetworkLoadPhoto> {
-                override fun onSuccess(result: NetworkLoadPhoto) {
-                    bindImage(result.url, result.bitmap, weakImageViewReference.get(), weakPlaceholderReference.get())
-                }
+        val request = repository.loadPhoto(params)
+        request.observe(true, object : Callback<NetworkLoadPhoto> {
+            override fun onSuccess(result: NetworkLoadPhoto) {
+                bindPhotoToView(
+                    result.url,
+                    result.bitmap,
+                    weakImageViewReference.get(),
+                    weakPlaceholderReference.get()
+                )
+            }
 
-                override fun onError() {
-                    placeholder.visibility = View.VISIBLE
-                }
-            })
-            requests[url] = request
-        }
+            override fun onError() {
+                placeholder.visibility = View.VISIBLE
+            }
+        })
+        requests[url] = request
     }
 
-    private fun bindImage(url: String, bitmap: Bitmap, imageView: ImageView?, placeholder: View?) {
+    private fun bindPhotoToView(url: String, bitmap: Bitmap, imageView: ImageView?, placeholder: View?) {
         if (imageView != null && placeholder != null && imageView.tag == url) {
             imageView.setImageBitmap(bitmap)
             imageView.visibility = View.VISIBLE

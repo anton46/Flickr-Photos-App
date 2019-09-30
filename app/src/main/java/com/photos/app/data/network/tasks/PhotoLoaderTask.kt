@@ -27,15 +27,20 @@ class PhotoLoaderTask(private val params: LoadPhotoRequestParams) : AsyncTask<Lo
         Preconditions.checkArgument(callbackReference != null, "Please provide callback")
 
         val params = loadPhotoRequestParams[0]
-        val bitmap: Bitmap?
+        var bitmap: Bitmap? = null
         var result: NetworkLoadPhoto? = null
         try {
             Log.i("PhotoLoaderTask", "Load image -> ${params.url}")
-            val inputStream = URL(params.url).openStream()
-            bitmap = BitmapFactory.decodeStream(inputStream)
-            if (bitmap != null) {
-                ImageCache.getInstance().put(params.url, bitmap)
-                result = NetworkLoadPhoto(params.url, bitmap)
+            ImageCache.getInstance().get(params.url)?.let {
+                bitmap = it
+            } ?: run {
+                val inputStream = URL(params.url).openStream()
+                bitmap = BitmapFactory.decodeStream(inputStream)
+            }
+
+            bitmap?.let {
+                ImageCache.getInstance().put(params.url, it)
+                result = NetworkLoadPhoto(params.url, it)
             }
         } catch (ioException: IOException) {
             Log.e("PhotoLoaderTask", "Error -> ${ioException.message}")
