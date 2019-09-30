@@ -29,7 +29,7 @@ class ImageCache {
 
     fun get(key: String) = memoryCache[key]
 
-    fun put(key: String, value: Bitmap) = apply { memoryCache.put(key, value) }
+    fun put(key: String, value: Bitmap) { memoryCache.put(key, value) }
 
     fun clear() {
         memoryCache.evictAll()

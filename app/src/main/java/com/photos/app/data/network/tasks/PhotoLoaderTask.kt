@@ -14,7 +14,8 @@ import java.io.IOException
 import java.lang.ref.WeakReference
 import java.net.URL
 
-class PhotoLoaderTask(private val params: LoadPhotoRequestParams) : AsyncTask<LoadPhotoRequestParams, Void, NetworkLoadPhoto>(),
+class PhotoLoaderTask(private val params: LoadPhotoRequestParams) :
+    AsyncTask<LoadPhotoRequestParams, Void, NetworkLoadPhoto>(),
     Observable<NetworkLoadPhoto> {
     private var callbackReference: WeakReference<Callback<NetworkLoadPhoto>>? = null
 
@@ -31,12 +32,8 @@ class PhotoLoaderTask(private val params: LoadPhotoRequestParams) : AsyncTask<Lo
         var result: NetworkLoadPhoto? = null
         try {
             Log.i("PhotoLoaderTask", "Load image -> ${params.url}")
-            ImageCache.getInstance().get(params.url)?.let {
-                bitmap = it
-            } ?: run {
-                val inputStream = URL(params.url).openStream()
-                bitmap = BitmapFactory.decodeStream(inputStream)
-            }
+            val inputStream = URL(params.url).openStream()
+            bitmap = BitmapFactory.decodeStream(inputStream)
 
             bitmap?.let {
                 ImageCache.getInstance().put(params.url, it)

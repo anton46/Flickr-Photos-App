@@ -10,7 +10,6 @@ import com.photos.app.data.network.core.UrlProvider
 import com.photos.app.domain.loader.SimplePhotoLoader
 import com.photos.app.domain.model.PhotoModel
 import com.photos.app.persentation.view.photoSize
-import kotlin.math.max
 
 class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.MovieItemViewHolder>() {
     companion object {
@@ -33,7 +32,7 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.MovieItemViewHolder>(
 
     fun addPhotos(movies: List<PhotoModel>) {
         items.addAll(movies)
-        notifyItemRangeInserted(max(0, items.size - movies.size), movies.size)
+        notifyItemRangeInserted(Math.max(0, items.size - movies.size), movies.size)
     }
 
     override fun getItemCount(): Int = items.size
@@ -63,7 +62,6 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.MovieItemViewHolder>(
         }
 
         fun clear() {
-            photo.setImageBitmap(null)
             photo.visibility = View.GONE
             placeholder.visibility = View.VISIBLE
         }
