@@ -100,7 +100,7 @@ class GalleryActivity : AppCompatActivity() {
         search_input.requestFocus()
         search_input.setOnEditorActionListener { v, actionId, event ->
             var handled = false
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 search()
                 handled = true
             }
