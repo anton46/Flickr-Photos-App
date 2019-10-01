@@ -65,7 +65,7 @@ class GalleryActivity : AppCompatActivity() {
     }
 
     private fun search(query: String) {
-        SimplePhotoLoader.getInstance().clear()
+        SimplePhotoLoader.instance.clear()
         adapter.clear()
         viewModel.search(query)
     }
@@ -126,7 +126,7 @@ class GalleryActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        ImageCache.getInstance().clear()
+        SimplePhotoLoader.instance.clear()
         super.onDestroy()
     }
 

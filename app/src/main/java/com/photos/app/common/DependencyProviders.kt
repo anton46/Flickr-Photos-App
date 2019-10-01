@@ -6,6 +6,7 @@ import com.photos.app.data.network.response.NetworkPhotos
 import com.photos.app.data.network.response.mappers.NetworkPhotosMapper
 import com.photos.app.data.repository.LoadPhotosRepositoryImpl
 import com.photos.app.data.repository.PhotosRepositoryImpl
+import com.photos.app.domain.loader.ImageCacheImpl
 import com.photos.app.domain.model.PhotoModel
 import com.photos.app.domain.model.PhotoModelMapper
 import com.photos.app.domain.repository.LoadPhotosRepository
@@ -22,3 +23,5 @@ fun provideLoadPhotosRepository() : LoadPhotosRepository =
 
 fun provideNetworkPhotosMapper(): Mapper<String, NetworkPhotos> =
     NetworkPhotosMapper()
+
+fun provideImageCache() = ImageCacheImpl()

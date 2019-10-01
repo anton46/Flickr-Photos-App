@@ -9,7 +9,6 @@ import com.photos.app.data.network.core.observable.Callback
 import com.photos.app.data.network.core.observable.Observable
 import com.photos.app.data.network.request.LoadPhotoRequestParams
 import com.photos.app.data.network.response.NetworkLoadPhoto
-import com.photos.app.domain.loader.ImageCache
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.net.URL
@@ -28,7 +27,7 @@ class PhotoLoaderTask(private val params: LoadPhotoRequestParams) :
         Preconditions.checkArgument(callbackReference != null, "Please provide callback")
 
         val params = loadPhotoRequestParams[0]
-        var bitmap: Bitmap? = null
+        val bitmap: Bitmap
         var result: NetworkLoadPhoto? = null
         try {
             Log.i("PhotoLoaderTask", "Load image -> ${params.url}")
@@ -36,7 +35,6 @@ class PhotoLoaderTask(private val params: LoadPhotoRequestParams) :
             bitmap = BitmapFactory.decodeStream(inputStream)
 
             bitmap?.let {
-                ImageCache.getInstance().put(params.url, it)
                 result = NetworkLoadPhoto(params.url, it)
             }
         } catch (ioException: IOException) {
@@ -67,6 +65,6 @@ class PhotoLoaderTask(private val params: LoadPhotoRequestParams) :
 
     override fun clear() {
         if (!isCancelled)
-            cancel(true)
+            cancel(false)
     }
 }

@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.photos.app.R
+import com.photos.app.common.provideLoadPhotosRepository
 import com.photos.app.data.network.core.UrlProvider
 import com.photos.app.domain.loader.SimplePhotoLoader
 import com.photos.app.domain.model.PhotoModel
 import com.photos.app.persentation.view.photoSize
+import kotlin.math.max
 
 class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.MovieItemViewHolder>() {
     companion object {
@@ -32,7 +34,7 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.MovieItemViewHolder>(
 
     fun addPhotos(movies: List<PhotoModel>) {
         items.addAll(movies)
-        notifyItemRangeInserted(Math.max(0, items.size - movies.size), movies.size)
+        notifyItemRangeInserted(max(0, items.size - movies.size), movies.size)
     }
 
     override fun getItemCount(): Int = items.size
@@ -53,7 +55,7 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.MovieItemViewHolder>(
 
         fun bindView(item: PhotoModel) {
             SimplePhotoLoader
-                .getInstance()
+                .instance
                 .loadPhoto(
                     item.buildUrl(),
                     photo,
