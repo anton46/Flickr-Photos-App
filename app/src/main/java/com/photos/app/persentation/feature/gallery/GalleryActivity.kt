@@ -3,6 +3,7 @@ package com.photos.app.persentation.feature.gallery
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -12,7 +13,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.photos.app.R
 import com.photos.app.common.providePhotoModelMapper
 import com.photos.app.common.providePhotoRepository
-import com.photos.app.domain.loader.ImageCache
 import com.photos.app.domain.loader.SimplePhotoLoader
 import com.photos.app.persentation.feature.gallery.viewmodel.GalleryViewModel
 import com.photos.app.persentation.feature.gallery.viewmodel.GalleryViewModel.ViewState
@@ -98,9 +98,17 @@ class GalleryActivity : AppCompatActivity() {
 
     private fun initView() {
         search_input.requestFocus()
+        search_input.setOnEditorActionListener { v, actionId, event ->
+            var handled = false
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                search()
+                handled = true
+            }
+            handled
+        }
+
         search_button.setOnClickListener {
-            search(search_input.text.toString())
-            hideKeyboard()
+            search()
         }
 
         feed.setHasFixedSize(true)
@@ -114,6 +122,11 @@ class GalleryActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun search() {
+        search(search_input.text.toString())
+        hideKeyboard()
     }
 
     private fun hideKeyboard() {

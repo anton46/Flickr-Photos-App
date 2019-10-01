@@ -27,6 +27,7 @@
                 android:lines="1"
                 android:hint="@string/search"
                 android:maxLines="1"
+                android:imeOptions="actionSend"
                 app:layout_constraintBottom_toTopOf="@+id/search_button" />
 
             <androidx.appcompat.widget.AppCompatButton
